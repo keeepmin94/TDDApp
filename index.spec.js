@@ -4,7 +4,7 @@ const should = require("should");
 
 describe("GET /users는", () => {
   describe("성공시", () => {
-    it("유저 객체를 담은 배열로 응답한", (done) => {
+    it(" ", (done) => {
       request(app)
         .get("/users")
         .end((err, res) => {
@@ -98,6 +98,21 @@ describe("POST /users는", () => {
         .send({ name: "daniel" })
         .expect(409)
         .end(done);
+    });
+  });
+});
+
+describe("PUT /users/:id는", () => {
+  describe("성공시", () => {
+    it("변경된 name을 응답한다.", (done) => {
+      const name = "ben";
+      request(app)
+        .put("/users/2")
+        .send({ name })
+        .end((err, res) => {
+          res.body.should.have.property("name", name);
+          done();
+        });
     });
   });
 });

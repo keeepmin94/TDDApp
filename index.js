@@ -49,6 +49,18 @@ app.post("/users", (req, res) => {
   res.status(201).json(user);
 });
 
+app.put("/users/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const name = req.params.name;
+  // if (Number.isNaN(id)) return res.status(400).end();
+
+  const user = users.filter((user) => user.id === id)[0];
+  user.name = name;
+  console.log(user);
+  res.json(user);
+  //res.status(204).end();
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
