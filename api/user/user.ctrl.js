@@ -1,16 +1,15 @@
 // api 로직
-
-var users = [
-  { id: 1, name: "alice" },
-  { id: 2, name: "bek" },
-  { id: 3, name: "chris" },
-];
+const models = require("../../models");
 
 const index = (req, res) => {
   req.query.limit = req.query.limit || 10; //클라이언트 요청에서 limit이 없는경우 10 할당
   const limit = parseInt(req.query.limit); //문자열임
   if (Number.isNaN(limit)) return res.status(400).end();
-  res.json(users.slice(0, limit));
+
+  models.User.findAll({}).then((users) => {
+    res.json(users);
+  });
+  // res.json(users.slice(0, limit));
 };
 
 const show = (req, res) => {
