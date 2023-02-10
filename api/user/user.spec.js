@@ -5,9 +5,11 @@ const should = require("should");
 const models = require("../../models");
 
 describe("GET /users는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => models.sequelize.sync({ force: true }));
+  before(() => models.User.bulkCreate(users)); //여러개 데이터를 입력 : bulkCreate
   describe("성공시", () => {
-    before(() => models.sequelize.sync({ force: true }));
-    it.only(" ", (done) => {
+    it(" ", (done) => {
       request(app)
         .get("/users")
         .end((err, res) => {
@@ -33,6 +35,9 @@ describe("GET /users는", () => {
 });
 
 describe("GET /users/1는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => models.sequelize.sync({ force: true }));
+  before(() => models.User.bulkCreate(users)); //여러개 데이터를 입력 : bulkCreate
   describe("성공시", () => {
     it("id가 1인 유저 객체를 반환한다.", (done) => {
       request(app)
@@ -54,6 +59,9 @@ describe("GET /users/1는", () => {
 });
 
 describe("DELETE /users/1는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => models.sequelize.sync({ force: true }));
+  before(() => models.User.bulkCreate(users)); //여러개 데이터를 입력 : bulkCreate
   describe("성공시", () => {
     it("204를 응답한다.", (done) => {
       request(app).delete("/users/1").expect(204).end(done);
@@ -67,6 +75,9 @@ describe("DELETE /users/1는", () => {
 });
 
 describe("POST /users는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => models.sequelize.sync({ force: true }));
+  before(() => models.User.bulkCreate(users)); //여러개 데이터를 입력 : bulkCreate
   describe("성공시", () => {
     let name = "daniel",
       body;
@@ -105,7 +116,10 @@ describe("POST /users는", () => {
   });
 });
 
-describe("PUT /users/:id는", () => {
+describe.only("PUT /users/:id는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => models.sequelize.sync({ force: true }));
+  before(() => models.User.bulkCreate(users)); //여러개 데이터를 입력 : bulkCreate
   describe("성공시", () => {
     it("변경된 name을 응답한다", (done) => {
       const name = "bbb";
@@ -129,7 +143,11 @@ describe("PUT /users/:id는", () => {
       request(app).put("/users/99").send({ name: "foo" }).expect(404).end(done);
     });
     it("이름이 중복일 경우 409을 응답한다", (done) => {
-      request(app).put("/users/3").send({ name: "bek" }).expect(409).end(done);
+      request(app)
+        .put("/users/3")
+        .send({ name: "chris" })
+        .expect(409)
+        .end(done);
     });
   });
 });
